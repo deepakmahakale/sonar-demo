@@ -9,6 +9,7 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'test/**/*'
+    - 'vendor/**/*'
 
 Layout/SpaceAroundMethodCallOperator:
   Enabled: false

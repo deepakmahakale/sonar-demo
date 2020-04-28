@@ -15,16 +15,6 @@ blocks:
             - sem-version ruby 2.6.5
             - bundle install --deployment -j 4 --path vendor/bundle
             - cache store
-  - name: Code scanning
-    task:
-      jobs:
-        - name: check style
-          commands:
-            - checkout
-            - cache restore
-            - sem-version ruby 2.6.5
-            - bundle install --deployment --path vendor/bundle
-            - bundle exec rubocop
   - name: Unit tests
     task:
       prologue:
@@ -39,3 +29,14 @@ blocks:
         - name: RSpec - model tests
           commands:
             - bundle exec rspec spec/models
+
+  - name: Code scanning
+    task:
+      jobs:
+        - name: check style
+          commands:
+            - checkout
+            - cache restore
+            - sem-version ruby 2.6.5
+            - bundle install --deployment --path vendor/bundle
+            - bundle exec rubocop

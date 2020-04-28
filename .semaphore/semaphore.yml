@@ -24,6 +24,7 @@ blocks:
           - sem-service start mysql
           - sem-version ruby 2.6.5
           - bundle install --deployment --path vendor/bundle
+          - cp config/database.example.yml config/database.yml
           - bundle exec rake db:setup
       jobs:
         - name: RSpec - model tests

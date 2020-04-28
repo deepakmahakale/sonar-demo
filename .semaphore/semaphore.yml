@@ -4,6 +4,10 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+  containers:
+    - name: main
+      image: semaphoreci/ruby:2.7.0-node
+      # image: semaphoreci/ruby:2.7.0
 blocks:
   - name: Setup
     task:
@@ -12,9 +16,6 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - cd ~/.rbenv/plugins/ruby-build && git pull && cd $SEMAPHORE_PROJECT_DIR
-            - rbenv install 2.7.0
-            - rbenv local 2.7.0
             - bundle install --deployment -j 4 --path vendor/bundle
             - cache store
   - name: Unit tests
@@ -24,9 +25,6 @@ blocks:
           - checkout
           - cache restore
           - sem-service start mysql
-          - cd ~/.rbenv/plugins/ruby-build && git pull && cd $SEMAPHORE_PROJECT_DIR
-          - rbenv install 2.7.0
-          - rbenv local 2.7.0
           - bundle install --deployment --path vendor/bundle
           - cp config/database.example.yml config/database.yml
           - bundle exec rake db:setup
@@ -42,8 +40,5 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - cd ~/.rbenv/plugins/ruby-build && git pull && cd $SEMAPHORE_PROJECT_DIR
-            - rbenv install 2.7.0
-            - rbenv local 2.7.0
             - bundle install --deployment --path vendor/bundle
             - bundle exec rubocop

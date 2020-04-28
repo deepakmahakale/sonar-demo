@@ -34,6 +34,9 @@ blocks:
         - name: RSpec - model tests
           commands:
             - bundle exec rspec spec/models
+        - name: RSpec - controller tests
+          commands:
+            - bundle exec rspec spec/models
 
   - name: Code scanning
     task:

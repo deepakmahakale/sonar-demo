@@ -1,0 +1,41 @@
+version: v1.0
+name: Semaphore Demo
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Setup
+    task:
+      jobs:
+        - name: bundle
+          commands:
+            - checkout
+            - cache restore
+            - sem-version ruby 2.6.5
+            - bundle install --deployment -j 4 --path vendor/bundle
+            - cache store
+  - name: Code scanning
+    task:
+      jobs:
+        - name: check style
+          commands:
+            - checkout
+            - cache restore
+            - sem-version ruby 2.6.5
+            - bundle install --deployment --path vendor/bundle
+            - bundle exec rubocop
+  - name: Unit tests
+    task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore
+          - sem-service start mysql
+          - sem-version ruby 2.6.5
+          - bundle install --deployment --path vendor/bundle
+          - bundle exec rake db:setup
+      jobs:
+        - name: RSpec - model tests
+          commands:
+            - bundle exec rspec spec/models
